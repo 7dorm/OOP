@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"ru.nsu.dunaev","l":"Add"},{"l":"All Classes","url":"allclasses-index.html"},{"p":"ru.nsu.dunaev","l":"Div"},{"p":"ru.nsu.dunaev","l":"Expression"},{"p":"ru.nsu.dunaev","l":"Main"},{"p":"ru.nsu.dunaev","l":"Mul"},{"p":"ru.nsu.dunaev","l":"Number"},{"p":"ru.nsu.dunaev","l":"Sub"},{"p":"ru.nsu.dunaev","l":"Variable"}]
