@@ -9,6 +9,7 @@ class MainTest {
     @Test
     void mainTest1() {
         Expression e = new Add(new Number(3), new Mul(new Number(2), new Variable("x")));
+        System.out.println(e.toString());
         assertEquals(e.toString(), "(3+(2*x))");
     }
 
@@ -38,11 +39,5 @@ class MainTest {
         Expression de = e.derivative("x");
         de.print();
         assertEquals(de.toString(), "(0-1)");
-    }
-
-    @Test
-    void mainTest(){
-        Main.main();
-        assertTrue(true);
     }
 }
