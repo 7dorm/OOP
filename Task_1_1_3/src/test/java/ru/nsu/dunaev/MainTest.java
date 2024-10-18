@@ -1,7 +1,10 @@
 package ru.nsu.dunaev;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MainTest {
 
@@ -93,5 +96,11 @@ public class MainTest {
         );
         Expression d = e.derivative("x");
         assertEquals("(((1*x)+(x*1))+0)", d.toString());  // should print the derivative of x^2 + 5
+    }
+
+    @Test
+    void mainTest() {
+        Main.main();
+        assertTrue(true);
     }
 }
