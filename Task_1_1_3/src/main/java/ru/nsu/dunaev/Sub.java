@@ -1,7 +1,8 @@
 package ru.nsu.dunaev;
 
-public class Sub extends Expression{
-    private Expression left, right;
+public class Sub extends Expression {
+    private final Expression left;
+    private final Expression right;
 
     public Sub(Expression left, Expression right) {
         this.left = left;
@@ -24,10 +25,11 @@ public class Sub extends Expression{
 
     @Override
     public int eval(String variableAssignments) {
-        return left.eval(variableAssignments)-right.eval(variableAssignments);
+        return left.eval(variableAssignments) - right.eval(variableAssignments);
     }
+
     @Override
     public String toString() {
-        return "("+this.left.toString()+"-"+this.right.toString()+")";
+        return "(" + this.left.toString() + "-" + this.right.toString() + ")";
     }
 }

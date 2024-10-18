@@ -1,7 +1,7 @@
 package ru.nsu.dunaev;
 
-public class Variable extends Expression{
-    private String name;
+public class Variable extends Expression {
+    private final String name;
 
     public Variable(String name) {
         this.name = name;
@@ -23,11 +23,10 @@ public class Variable extends Expression{
     @Override
     public int eval(String variableAssignments) {
         String[] assignments = variableAssignments.split(";");
-        for (String assignment : assignments)
-        {
+        for (String assignment : assignments) {
             String[] parts = assignment.strip().split("=");
 
-            if(parts[0].strip().equals(name))
+            if (parts[0].strip().equals(name))
                 return Integer.parseInt(parts[1].strip());
             System.out.println(parts[0]);
         }

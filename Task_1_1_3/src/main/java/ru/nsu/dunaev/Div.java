@@ -1,7 +1,8 @@
 package ru.nsu.dunaev;
 
-public class Div extends Expression{
-    private Expression left, right;
+public class Div extends Expression {
+    private final Expression left;
+    private final Expression right;
 
     public Div(Expression left, Expression right) {
         this.left = left;
@@ -25,7 +26,7 @@ public class Div extends Expression{
 
     @Override
     public int eval(String variableAssignments) {
-        if (right.eval(variableAssignments)!=0)
+        if (right.eval(variableAssignments) != 0)
             return left.eval(variableAssignments) / right.eval(variableAssignments);
         else {
             System.out.println("Division by 0");
@@ -35,6 +36,6 @@ public class Div extends Expression{
 
     @Override
     public String toString() {
-        return "("+this.left.toString()+"/"+this.right.toString()+")";
+        return "(" + this.left.toString() + "/" + this.right.toString() + ")";
     }
 }

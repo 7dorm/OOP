@@ -1,7 +1,7 @@
 package ru.nsu.dunaev;
 
-public class Number extends Expression{
-    private int value;
+public class Number extends Expression {
+    private final int value;
 
     public Number(int value) {
         this.value = value;

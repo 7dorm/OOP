@@ -1,7 +1,8 @@
 package ru.nsu.dunaev;
 
-public class Mul extends Expression{
-    private Expression left, right;
+public class Mul extends Expression {
+    private final Expression left;
+    private final Expression right;
 
     public Mul(Expression left, Expression right) {
         this.left = left;
@@ -25,10 +26,11 @@ public class Mul extends Expression{
 
     @Override
     public int eval(String variableAssignments) {
-        return left.eval(variableAssignments)*right.eval(variableAssignments);
+        return left.eval(variableAssignments) * right.eval(variableAssignments);
     }
+
     @Override
     public String toString() {
-        return "("+this.left.toString()+"*"+this.right.toString()+")";
+        return "(" + this.left.toString() + "*" + this.right.toString() + ")";
     }
 }
