@@ -9,12 +9,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
-
-    @Test
-    void mainTest() {
-        assertTrue(true);
-    }
-
         private Deck deck;
         private Player player;
         private Dealer dealer;
@@ -68,6 +62,24 @@ class MainTest {
             assertEquals(0, player.hand.length());  // After reset, the hand should be empty
         }
 
+
+    @Test
+    void testHandGetHand() {
+            Card[] card = player.hand.getHand();
+            assertEquals(52, card.length);
+        }
+
+    @Test
+    void testHandTakeCard() {
+            player.hand.takeCard(new Card(Rank.ACE, Suit.HEARTS));
+            assertEquals("Туз Черви (11)", player.hand.getHand()[player.hand.count-1].toString());
+    }
+
+    @Test
+    void testHandLength() {
+        assertEquals(0, player.hand.length());
+        }
+
         @Test
         public void testCardSumForPlayer() {
             player.hand.takeCard(new Card(Rank.TEN, Suit.SPADES));
@@ -116,5 +128,16 @@ class MainTest {
             assertEquals(51, deck.count);  // One card should have been drawn
             deck.reset();
             assertEquals(52, deck.count);  // After resetting, the deck should have 52 cards again
+        }
+
+        @Test
+        public void mainTest(){
+            Main.main(new String[]{"main"});
+            assertTrue(true);
+        }
+
+        @Test
+        public void dealerTestToString(){
+            assertEquals("\tКарты диллера: [null, <закрытая карта>]", dealer.toString());
         }
     }

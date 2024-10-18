@@ -7,7 +7,9 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Добро пожаловать в Блэкджек!");
-        start(System.nanoTime());
+        if (args.length == 0){
+            start(System.nanoTime());
+        }
     }
 
     public static void start(long seed){

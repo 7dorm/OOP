@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ru.nsu.dunaev.MainTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2024-10-18T02:54:27" hostname="deudeuka-MacBook-Air.local" time="0.038">
+<testsuite name="ru.nsu.dunaev.MainTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2024-10-18T03:08:50" hostname="deudeuka-MacBook-Air.local" time="0.046">
   <properties/>
-  <testcase name="testPlayerWinCount()" classname="ru.nsu.dunaev.MainTest" time="0.018"/>
+  <testcase name="testHandTakeCard()" classname="ru.nsu.dunaev.MainTest" time="0.022"/>
+  <testcase name="testHandGetHand()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testPlayerWinCount()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
   <testcase name="testPlayerTakeCard()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
-  <testcase name="testCardCreation()" classname="ru.nsu.dunaev.MainTest" time="0.006"/>
-  <testcase name="testCardSumWithAce()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testCardCreation()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testCardSumWithAce()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
   <testcase name="testDealerWinCount()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
-  <testcase name="mainTest()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
-  <testcase name="testDeckShuffleAndDraw()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="mainTest()" classname="ru.nsu.dunaev.MainTest" time="0.005"/>
+  <testcase name="testDeckShuffleAndDraw()" classname="ru.nsu.dunaev.MainTest" time="0.002"/>
   <testcase name="testDealerTakeCard()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
   <testcase name="testCardSumForPlayer()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
-  <testcase name="testHandReset()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testHandLength()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="dealerTestToString()" classname="ru.nsu.dunaev.MainTest" time="0.003"/>
+  <testcase name="testHandReset()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
   <testcase name="testDealerReveal()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
-  <testcase name="testDeckReset()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
-  <testcase name="testDeckInitialization()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
+  <testcase name="testDeckReset()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testDeckInitialization()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <system-out><![CDATA[Добро пожаловать в Блэкджек!
+]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
