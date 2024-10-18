@@ -1,24 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ru.nsu.dunaev.MainTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2024-10-18T03:08:50" hostname="deudeuka-MacBook-Air.local" time="0.046">
+<testsuite name="ru.nsu.dunaev.MainTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2024-10-18T03:18:51" hostname="deudeuka-MacBook-Air.local" time="0.054">
   <properties/>
-  <testcase name="testHandTakeCard()" classname="ru.nsu.dunaev.MainTest" time="0.022"/>
-  <testcase name="testHandGetHand()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
-  <testcase name="testPlayerWinCount()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
-  <testcase name="testPlayerTakeCard()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testHandTakeCard()" classname="ru.nsu.dunaev.MainTest" time="0.023"/>
+  <testcase name="testHandGetHand()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testPlayerWinCount()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testPlayerTakeCard()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
   <testcase name="testCardCreation()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
   <testcase name="testCardSumWithAce()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
   <testcase name="testDealerWinCount()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
-  <testcase name="mainTest()" classname="ru.nsu.dunaev.MainTest" time="0.005"/>
-  <testcase name="testDeckShuffleAndDraw()" classname="ru.nsu.dunaev.MainTest" time="0.002"/>
+  <testcase name="mainTest()" classname="ru.nsu.dunaev.MainTest" time="0.015"/>
+  <testcase name="testDeckShuffleAndDraw()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
   <testcase name="testDealerTakeCard()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
-  <testcase name="testCardSumForPlayer()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
-  <testcase name="testHandLength()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
-  <testcase name="dealerTestToString()" classname="ru.nsu.dunaev.MainTest" time="0.003"/>
-  <testcase name="testHandReset()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testCardSumForPlayer()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testHandLength()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="dealerTestToString()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testHandReset()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
   <testcase name="testDealerReveal()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
-  <testcase name="testDeckReset()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
-  <testcase name="testDeckInitialization()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testDeckReset()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testDeckInitialization()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testHandToString()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
   <system-out><![CDATA[Добро пожаловать в Блэкджек!
+Введите “1”, чтобы взять карту, и “0”, чтобы остановиться ...
+Дилер открывает закрытую карту null
+	Ваши карты: [] => 0
+	Карты диллера: [] => 0
+
+Диллер открыл карту Девятка Трефы (9)
+	Ваши карты: [] => 0
+	Карты диллера: [Девятка Трефы (9)] => 9
+
+Диллер открыл карту Туз Черви (11)
+	Ваши карты: [] => 0
+	Карты диллера: [Девятка Трефы (9),Туз Черви (11)] => 20
+
+Раунд 1
+Дилер раздал карты
+	Ваши карты: [Девятка Черви (9),Восьмёрка Черви (8)] => 17
+	Карты диллера: [Девятка Трефы (9),Туз Черви (11),Девятка Пики (9),Тройка Бубны (3)] => 22
+
+Ваш ход
+-------
+Введите “1”, чтобы взять карту, и “0”, чтобы остановиться ...
+Ход диллера
+-------
+17 22
+Вы выиграли раунд! Счет 1:0 в вашу пользу.
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
