@@ -1,5 +1,9 @@
 package ru.nsu.dunaev;
 
+import java.util.Arrays;
+
+import static java.util.Arrays.*;
+
 public class Player {
     private final Deck deck;
     public Hand hand;
@@ -22,15 +26,13 @@ public class Player {
 
     public int cardSum() {
         int count = 0;
-        for (int i = 0; i < this.hand.length(); i++) {
-            if (this.hand.getHand()[i].getRank().getValue() == 11) {
-                if (count > 11) {
-                    count += 1;
-                } else {
-                    count += 11;
-                }
+        for (int i = 0; i < this.hand.count; i++) {
+            Card card = deck.sortCards(this.hand.getHand(), this.hand.count)[i];
+            int value = card.getRank().getValue();
+            if (value == 11) {
+                count += (count > 10) ? 1 : 11;  // Use 10 instead of 11 to account for current count
             } else {
-                count += this.hand.getHand()[i].getRank().getValue();
+                count += value;
             }
         }
         return count;

@@ -16,6 +16,19 @@ public class Deck {
         this.count = cardsPerSuit * suits;
     }
 
+    public Card[] sortCards(Card[] cards, int n) {
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1 ; j++) {
+                if (cards[j].getRank().getValue() > cards[j + 1].getRank().getValue()) {
+                    Card temp = cards[j];
+                    cards[j] = cards[j + 1];
+                    cards[j + 1] = temp;
+                }
+            }
+        }
+        return cards;
+    }
+
     private void shuffle() {
         Random random = new Random(this.seed);
         for (int i = 0; i < deck.length; i++) {
@@ -47,6 +60,7 @@ public class Deck {
                 this.deck[i * suits + j] = new Card(Rank.values()[i], Suit.values()[j]);
             }
         }
+        this.count = this.deck.length;
         shuffle();
     }
 

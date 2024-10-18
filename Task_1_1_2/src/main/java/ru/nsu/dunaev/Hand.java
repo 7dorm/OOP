@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Hand {
     private Card[] hand;
-    private int count = 0;
+    public int count = 0;
 
     Hand(){
         reset();
