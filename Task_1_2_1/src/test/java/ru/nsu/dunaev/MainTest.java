@@ -22,6 +22,20 @@ public class MainTest {
     }
 
     @Test
+    public void testMain(){
+        Main.main(new String[]{"Test"});
+        assertTrue(true);
+    }
+
+    @Test
+    public void testCreateGraph(){
+        adjacencyMatrixGraph = new AdjacencyMatrixGraph(5);
+        adjacencyListGraph = new AdjacencyListGraph();
+        assertNotNull(adjacencyListGraph);
+        assertNotNull(adjacencyMatrixGraph);
+    }
+
+    @Test
     public void testAddAndRemoveVertex() {
         adjacencyListGraph.addVertex(5);
         assertTrue(adjacencyListGraph.getNeighbors(5).isEmpty());

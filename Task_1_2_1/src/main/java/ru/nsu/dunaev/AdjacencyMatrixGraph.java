@@ -78,15 +78,23 @@ public class AdjacencyMatrixGraph implements Graph {
         return neighbors;
     }
 
-    @Override
-    public void readFromFile(String filePath) {
-        // Реализуйте чтение из файла
-    }
 
     @Override
     public boolean equals(Object obj) {
-        // Реализуйте сравнение на равенство
-        return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        AdjacencyMatrixGraph other = (AdjacencyMatrixGraph) obj;
+        if (this.size != other.size) return false;
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (this.matrix[i][j] != other.matrix[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

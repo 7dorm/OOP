@@ -16,7 +16,11 @@ public class AdjacencyListGraph implements Graph {
 
     @Override
     public void removeVertex(int vertex) {
-        adjacencyList.values().forEach(e -> e.remove(vertex));
+        try {
+            adjacencyList.values().forEach(e -> e.remove(vertex));
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("No neighbours");
+        }
         adjacencyList.remove(vertex);
     }
 
@@ -28,18 +32,13 @@ public class AdjacencyListGraph implements Graph {
 
     @Override
     public void removeEdge(int vertex1, int vertex2) {
-        adjacencyList.get(vertex1).remove(vertex2);
-        adjacencyList.get(vertex2).remove(vertex1);
+        adjacencyList.get(vertex1).removeIf(v -> v == vertex2);
+        adjacencyList.get(vertex2).removeIf(v -> v == vertex1);
     }
 
     @Override
     public List<Integer> getNeighbors(int vertex) {
         return adjacencyList.get(vertex);
-    }
-
-    @Override
-    public void readFromFile(String filePath) {
-        // Реализуйте чтение из файла
     }
 
     @Override

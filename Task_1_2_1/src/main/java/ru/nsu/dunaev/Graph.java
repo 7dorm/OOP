@@ -7,7 +7,6 @@ public interface Graph {
     void addEdge(int vertex1, int vertex2);
     void removeEdge(int vertex1, int vertex2);
     List<Integer> getNeighbors(int vertex);
-    void readFromFile(String filePath);
     boolean equals(Object obj);
     String toString();
 }
