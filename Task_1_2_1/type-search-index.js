@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"ru.nsu.dunaev","l":"AdjacencyListGraph"},{"p":"ru.nsu.dunaev","l":"AdjacencyMatrixGraph"},{"l":"All Classes","url":"allclasses-index.html"},{"p":"ru.nsu.dunaev","l":"Graph"},{"p":"ru.nsu.dunaev","l":"Main"}]
