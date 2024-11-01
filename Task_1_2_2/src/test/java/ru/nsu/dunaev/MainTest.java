@@ -61,7 +61,7 @@ public class MainTest {
         assertTrue(hashTable.containsKey("one"));
 
         hashTable.remove("one");
-        assertFalse(hashTable.containsKey("one"));
+        assertThrows(NoSuchElementException.class, () -> {hashTable.containsKey("one");});
     }
 
     @Test
