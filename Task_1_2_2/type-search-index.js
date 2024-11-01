@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"ru.nsu.dunaev","l":"HashTable.Entry"},{"p":"ru.nsu.dunaev","l":"HashTable"},{"p":"ru.nsu.dunaev","l":"Main"}]
