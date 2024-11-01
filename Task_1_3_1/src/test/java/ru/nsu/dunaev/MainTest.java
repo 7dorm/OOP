@@ -77,7 +77,7 @@ class MainTest {
         }
         List<Integer> result = Main.find(TEST_FILE, "bra");
         assertEquals(10000, result.size());
-        assertEquals(1, result.getFirst());
+        assertEquals(1, result.get(0));
         assertEquals(39997, result.get(9999));
     }
 
