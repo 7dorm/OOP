@@ -2,10 +2,13 @@ package ru.nsu.dunaev;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class MainTest {
     private HashTable<String, Number> hashTable;
@@ -23,41 +26,42 @@ public class MainTest {
 
     @Test
     public void testCreateHashTable() {
-        assertNotNull(hashTable, "HashTable не должен быть null после инициализации.");
+        assertNotNull(hashTable);
     }
 
     @Test
     public void testPutAndGet() {
         hashTable.put("one", 1);
-        assertEquals(1, hashTable.get("one"), "Значение по ключу 'one' должно быть равно 1.");
+        assertEquals(1, hashTable.get("one"));
 
         hashTable.put("two", 2.0);
-        assertEquals(2.0, hashTable.get("two"), "Значение по ключу 'two' должно быть равно 2.0.");
+        assertEquals(2.0, hashTable.get("two"));
     }
 
     @Test
     public void testUpdate() {
         hashTable.put("one", 1);
         hashTable.put("one", 1.0);
-        assertEquals(1.0, hashTable.get("one"), "Значение по ключу 'one' должно быть обновлено до 1.0.");
+        assertEquals(1.0, hashTable.get("one"));
     }
 
     @Test
     public void testRemove() {
         hashTable.put("one", 1);
-        assertEquals(1, hashTable.get("one"), "Значение по ключу 'one' должно быть равно 1 перед удалением.");
+        assertEquals(1, hashTable.get("one"));
 
         hashTable.remove("one");
-        assertNull(hashTable.get("one"), "Значение по ключу 'one' должно быть null после удаления.");
+        assertThrows(NoSuchElementException.class, () -> {hashTable.get("one");});
+        hashTable.remove("one");
     }
 
     @Test
     public void testContainsKey() {
         hashTable.put("one", 1);
-        assertTrue(hashTable.containsKey("one"), "Хеш-таблица должна содержать ключ 'one'.");
+        assertTrue(hashTable.containsKey("one"));
 
         hashTable.remove("one");
-        assertFalse(hashTable.containsKey("one"), "Хеш-таблица не должна содержать ключ 'one' после удаления.");
+        assertFalse(hashTable.containsKey("one"));
     }
 
     @Test

@@ -39,7 +39,7 @@ public class HashTable<K, V> implements Iterable<HashTable.Entry<K, V>> {
                 return entry.value;
             }
         }
-        return null;
+        throw new NoSuchElementException();
     }
 
     public void remove(K key) {
@@ -73,7 +73,7 @@ public class HashTable<K, V> implements Iterable<HashTable.Entry<K, V>> {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        HashTable<?, ?> other = (HashTable<?, ?>) obj;
+        HashTable<K, V> other = (HashTable<K, V>) obj;
 
         if (this.size != other.size) return false;
 
@@ -151,7 +151,7 @@ public class HashTable<K, V> implements Iterable<HashTable.Entry<K, V>> {
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
-            Entry<?, ?> other = (Entry<?, ?>) obj;
+            Entry<K, V> other = (Entry<K, V>) obj;
             return Objects.equals(key, other.key) && Objects.equals(value, other.value);
         }
 
