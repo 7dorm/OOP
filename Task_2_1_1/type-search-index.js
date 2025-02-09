@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"ru.nsu.dunaev","l":"Main"},{"p":"ru.nsu.dunaev","l":"PrimeCheckerParallelStream"},{"p":"ru.nsu.dunaev","l":"PrimeCheckerParallelThread"},{"p":"ru.nsu.dunaev","l":"PrimeCheckerSequential"}];updateSearchResults();
