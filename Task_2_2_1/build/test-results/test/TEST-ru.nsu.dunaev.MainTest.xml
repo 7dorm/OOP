@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.nsu.dunaev.MainTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2025-03-03T17:21:46" hostname="deudeuka-MacBook-Air.local" time="0.036">
+  <properties/>
+  <testcase name="testWarehouseFullScenario()" classname="ru.nsu.dunaev.MainTest" time="0.018"/>
+  <testcase name="testBakerSetBusyAndOrder()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testBakerInitialization()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testOrderArrivalEvent()" classname="ru.nsu.dunaev.MainTest" time="0.003"/>
+  <testcase name="testFullSimulationRun()" classname="ru.nsu.dunaev.MainTest" time="0.002"/>
+  <testcase name="testCourierSetBusy()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testSimulationInitialization()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testWarehouseInitialization()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testBakerStartBakingEvent()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testOrderSetState()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testCourierInitialization()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testOrderCreation()" classname="ru.nsu.dunaev.MainTest" time="0.0"/>
+  <testcase name="testWarehouseAddAndTakePizzas()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
