@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'jacoco'
+}
+
+group = 'ru.nsu.dunaev'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.22'
+
+}
+
+test {
+    useJUnitPlatform()
+}
