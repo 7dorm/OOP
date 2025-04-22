@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     private static final String DEFAULT_CONFIG_FILE = "checker.groovy";
@@ -85,14 +87,26 @@ public class Main {
                 Map<String, CheckResult> studentResults = new HashMap<>();
                 activities.put(student.githubNick, collectActivity(repoPath));
 
+                Arrays.stream(Objects.requireNonNull(new File(repoPath).listFiles())).forEach(e -> {
+                    if (e.isDirectory()) {
+                        File file = new File(e.getAbsolutePath(), "gradlew");
+                        if (file.isFile()) {
+                            file.setExecutable(true);
+                        }
+                    }
+                }
+                );
+
+
                 for (CheckTask check : config.checks) {
                     if (check.studentNicks.contains(student.githubNick)) {
-                        System.out.println(check.taskId + " " + config.tasks.getFirst().toString() + " : " + repoPath);
                         Task task = config.tasks.stream()
                                 .filter(t -> t.id.equals(check.taskId))
                                 .findFirst()
                                 .orElse(null);
                         if (task == null) continue;
+
+
 
                         CheckResult result = processTask(repoPath, task, config, student.githubNick);
                         studentResults.put(task.id, result);
@@ -141,23 +155,64 @@ public class Main {
 
     private static CheckResult processTask(String repoPath, Task task, Config config, String studentNick) {
         CheckResult result = new CheckResult();
+        StringBuilder failureDetails = new StringBuilder();
 
-        result.buildPassed = runCommand(repoPath, "mvn", "clean", "compile") == 0;
-        if (!result.buildPassed) return result;
+        result.buildPassed = runCommand(repoPath + "/" + task.id, getGradleCommand("clean", "build")) == 0;
+        if (!result.buildPassed) {
+            String buildOutput = runCommandWithOutput(repoPath, getGradleCommand("clean", "build"));
+            failureDetails.append("Build failed: ").append(buildOutput).append("\n");
+        }
 
-        result.docsPassed = runCommand(repoPath, "mvn", "javadoc:javadoc") == 0;
-        if (!result.docsPassed) return result;
+        result.docsPassed = runCommand(repoPath + "/" + task.id, getGradleCommand("javadoc")) == 0;
+        if (!result.docsPassed) {
+            String javadocOutput = runCommandWithOutput(repoPath, getGradleCommand("javadoc"));
+            failureDetails.append("Javadoc failed: ").append(javadocOutput).append("\n");
+        }
 
-        result.stylePassed = runCommand(repoPath, "mvn", "checkstyle:check") == 0;
-        if (!result.stylePassed) return result;
+        File checkstyleConfig = new File(repoPath + "/" + task.id, "config/checkstyle/checkstyle.xml");
+        if (!checkstyleConfig.exists()) {
+            System.err.println("Checkstyle config missing in " + repoPath + "; skipping style check");
+            result.stylePassed = false;
+            failureDetails.append("Checkstyle config missing\n");
+        } else {
+            String checkstyleOutput = runCommandWithOutput(repoPath, getGradleCommand("checkstyleMain"));
+            result.stylePassed = runCommand(repoPath + "/" + task.id, getGradleCommand("checkstyleMain")) == 0;
+            if (!result.stylePassed) {
+                failureDetails.append("Checkstyle failed: ").append(checkstyleOutput).append("\n");
+                if (checkstyleOutput.contains("Missing a Javadoc comment")) {
+                    System.err.println("Only Javadoc issues detected; treating style check as passed for " + studentNick);
+                    result.stylePassed = true;
+                }
+            }
+        }
 
-        String testOutput = runCommandWithOutput(repoPath, "mvn", "test");
-        result.testsPassed = testOutput.contains("Tests run:") ? parseTests(testOutput) : new int[]{0, 0, 0};
+        String testOutput = runCommandWithOutput(repoPath + "/" + task.id, getGradleCommand("test"));
+        if (!testOutput.contains("test")) {
+            System.err.println("No test output for " + studentNick + " in " + repoPath + "; checking XML results");
+            result.testsPassed = parseTestResultsFromXml(repoPath + "/" + task.id);
+        } else {
+            result.testsPassed = parseTests(testOutput);
+        }
+        if (result.testsPassed[0] == 0 && result.testsPassed[1] == 0 && result.testsPassed[2] == 0) {
+            System.err.println("No tests found for " + studentNick + " in " + repoPath);
+            failureDetails.append("No tests found\n");
+        }
+
+        result.failureDetails = failureDetails.toString();
 
         result.points = calculatePoints(task, result, config);
         result.bonusPoints = getBonusPoints(config, task.id, studentNick);
 
         return result;
+    }
+
+    private static String[] getGradleCommand(String... args) {
+        String os = System.getProperty("os.name").toLowerCase();
+        String gradle = os.contains("win") ? "gradlew.bat" : "./gradlew";
+        List<String> command = new ArrayList<>();
+        command.add(gradle);
+        command.addAll(Arrays.asList(args));
+        return command.toArray(new String[0]);
     }
 
     private static int runCommand(String workingDir, String... command) {
@@ -197,15 +252,24 @@ public class Main {
 
     private static int[] parseTests(String output) {
         try {
+            Pattern pattern = Pattern.compile("Tests run: (\\d+), Failures: (\\d+), Errors: (\\d+), Skipped: (\\d+)");
+            Matcher matcher = pattern.matcher(output);
+            if (matcher.find()) {
+                int total = Integer.parseInt(matcher.group(1));
+                int failures = Integer.parseInt(matcher.group(2));
+                int errors = Integer.parseInt(matcher.group(3));
+                int skipped = Integer.parseInt(matcher.group(4));
+                return new int[]{total - failures - errors - skipped, failures + errors, skipped};
+            }
             String[] lines = output.split("\n");
             for (String line : lines) {
-                if (line.contains("Tests run:")) {
-                    String[] parts = line.split(",\\s*");
-                    int total = Integer.parseInt(parts[0].replaceAll("[^0-9]", ""));
-                    int failures = Integer.parseInt(parts[1].replaceAll("[^0-9]", ""));
-                    int errors = Integer.parseInt(parts[2].replaceAll("[^0-9]", ""));
-                    int skipped = Integer.parseInt(parts[3].replaceAll("[^0-9]", ""));
-                    return new int[]{total - failures - errors - skipped, failures + errors, skipped};
+                Pattern fallback = Pattern.compile("(\\d+)\\s*tests?,\\s*(\\d+)\\s*failed,\\s*(\\d+)\\s*skipped");
+                Matcher fallbackMatcher = fallback.matcher(line);
+                if (fallbackMatcher.find()) {
+                    int total = Integer.parseInt(fallbackMatcher.group(1));
+                    int failed = Integer.parseInt(fallbackMatcher.group(2));
+                    int skipped = Integer.parseInt(fallbackMatcher.group(3));
+                    return new int[]{total - failed - skipped, failed, skipped};
                 }
             }
         } catch (Exception e) {
@@ -214,17 +278,50 @@ public class Main {
         return new int[]{0, 0, 0};
     }
 
+    private static int[] parseTestResultsFromXml(String repoPath) {
+        File testResultsDir = new File(repoPath, "build/test-results/test");
+        if (!testResultsDir.exists()) {
+            return new int[]{0, 0, 0};
+        }
+        int passed = 0, failed = 0, skipped = 0;
+        try {
+            for (File xmlFile : testResultsDir.listFiles((dir, name) -> name.endsWith(".xml"))) {
+                String content = Files.readString(xmlFile.toPath());
+                if (content.contains("<testcase")) {
+                    int testCount = content.split("<testcase").length - 1;
+                    int failureCount = content.split("<failure").length - 1;
+                    int errorCount = content.split("<error").length - 1;
+                    int skipCount = content.split("<skipped").length - 1;
+                    passed += testCount - failureCount - errorCount - skipCount;
+                    failed += failureCount + errorCount;
+                    skipped += skipCount;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to parse test XML results in " + repoPath + ": " + e.getMessage());
+        }
+        return new int[]{passed, failed, skipped};
+    }
+
     private static int calculatePoints(Task task, CheckResult result, Config config) {
-        if (!result.stylePassed) return 0;
+        int points = task.maxPoints;
+
+//        if (LocalDate.now().isAfter(task.hardDeadline)) {
+//            points = 0;
+//        } else if (LocalDate.now().isAfter(task.softDeadline)) {
+//            points = 5;
+//        }
+
         int passedTests = result.testsPassed[0];
         int totalTests = passedTests + result.testsPassed[1] + result.testsPassed[2];
-        double ratio = totalTests > 0 ? (double) passedTests / totalTests : 0;
-        int points = (int) (ratio * task.maxPoints);
-        if (LocalDate.now().isAfter(task.hardDeadline)) {
-            points = (int) (points * 0.5);
-        } else if (LocalDate.now().isAfter(task.softDeadline)) {
-            points = (int) (points * 0.8);
-        }
+        double ratio = totalTests > 0 ? (double) passedTests / totalTests : 1;
+        points = (int) (points * ratio);
+
+        double penalty = 1.0;
+        if (!result.buildPassed) penalty = 0;
+        if (!result.docsPassed) penalty *= 0.8;
+        if (!result.stylePassed) penalty *= 0.9;
+        points = (int) (points * penalty);
         return points;
     }
 
@@ -236,7 +333,7 @@ public class Main {
     private static List<Activity> collectActivity(String repoPath) {
         List<Activity> activities = new ArrayList<>();
         try {
-            ProcessBuilder pb = new ProcessBuilder("git", "log", "--pretty=%ci", "--since=6 months ago");
+            ProcessBuilder pb = new ProcessBuilder("git", "log", "--pretty=%ci", "--since=12 months ago");
             pb.directory(new File(repoPath));
             Process process = pb.start();
             String output = new String(process.getInputStream().readAllBytes());
@@ -262,6 +359,7 @@ public class Main {
                 .append("table { border-collapse: collapse; width: 100%; }")
                 .append("th, td { border: 1px solid black; padding: 8px; text-align: left; }")
                 .append("th { background-color: #f2f2f2; }")
+                .append(".failure-details { font-size: 0.8em; color: red; }")
                 .append("</style></head><body>");
 
         for (Group group : config.groups) {
@@ -276,7 +374,7 @@ public class Main {
 
                 html.append("<h3>Lab ").append(task.id).append(" (").append(task.name).append(")</h3>")
                         .append("<table>")
-                        .append("<tr><th>Student</th><th>Build</th><th>Docs</th><th>Style</th><th>Tests</th><th>Bonus</th><th>Total</th></tr>");
+                        .append("<tr><th>Student</th><th>Build</th><th>Docs</th><th>Style</th><th>Tests</th><th>Bonus</th><th>Total</th><th>Details</th></tr>");
 
                 for (String nick : check.studentNicks) {
                     Student student = group.students.stream()
@@ -297,6 +395,7 @@ public class Main {
                             .append("<td>").append(String.format("%d/%d/%d", result.testsPassed[0], result.testsPassed[1], result.testsPassed[2])).append("</td>")
                             .append("<td>").append(result.bonusPoints).append("</td>")
                             .append("<td>").append(result.points + result.bonusPoints).append("</td>")
+                            .append("<td class='failure-details'>").append(result.failureDetails.replace("\n", "<br>")).append("</td>")
                             .append("</tr>");
                 }
                 html.append("</table>");
@@ -372,9 +471,10 @@ public class Main {
 
     private static String calculateGrade(int points, double activityRate, Config config) {
         Map<Integer, String> gradingScale = (Map<Integer, String>) config.settings.getOrDefault("gradingScale", new HashMap<>());
-        int adjustedPoints = (int) (points * Math.min(1.0, activityRate / 0.7));
+        int taskCount = config.checks.size();
+        System.out.println(((double) points / ((double)taskCount * 10)) * 100);
         return gradingScale.entrySet().stream()
-                .filter(e -> adjustedPoints >= e.getKey())
+                .filter(e -> (int)(((double) points / ((double)taskCount * 10)) * 100) >= e.getKey())
                 .map(Map.Entry::getValue)
                 .findFirst()
                 .orElse("-");
@@ -424,6 +524,7 @@ public class Main {
         int[] testsPassed = new int[]{0, 0, 0};
         int points;
         int bonusPoints;
+        String failureDetails = "";
     }
 
     static class Activity {

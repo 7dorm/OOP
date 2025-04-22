@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'groovy'
     id 'jacoco'
+    id 'checkstyle'
 }
 
 group = 'ru.nsu.dunaev'
@@ -15,9 +16,36 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'org.codehaus.groovy:groovy-all:3.0.22'
-
 }
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showExceptions true
+        showCauses true
+        showStackTraces true
+        exceptionFormat "full"
+    }
+}
+
+jacoco {
+    toolVersion = '0.8.12'
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+checkstyle {
+    toolVersion = '10.12.0'
+    configFile = file('config/checkstyle/checkstyle.xml')
+    ignoreFailures = false
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
 }
