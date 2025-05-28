@@ -6,7 +6,8 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="10" alignment="CENTER" fx:controller="ru.nsu.dunaev.SnakeController">
     <children>
-        <Label fx:id="scoreLabel" text="Score: 0"/>
+        <Label fx:id="scoreLabel" text="Player Score: 0"/>
+        <Label fx:id="botScoreLabel" text="Bot Score: 0"/>
         <GridPane fx:id="gameGrid" hgap="1" vgap="1"/>
         <Button fx:id="startButton" text="Start Game" onAction="#startGame"/>
     </children>

@@ -10,6 +10,7 @@ public class SnakeController {
     @FXML private GridPane gameGrid;
     @FXML private Label scoreLabel;
     @FXML private Button startButton;
+    @FXML private Label botScoreLabel;
 
     private SnakeModel model;
     private SnakeView view;
@@ -17,7 +18,7 @@ public class SnakeController {
     private static final int WIDTH = 20;
     private static final int HEIGHT = 20;
     private static final int CELL_SIZE = 20;
-    private static final int TARGET_LENGTH = WIDTH*HEIGHT;
+    private static final int TARGET_LENGTH = WIDTH * HEIGHT;
 
     @FXML
     public void initialize() {
@@ -27,9 +28,7 @@ public class SnakeController {
     }
 
     public void setupInput() {
-        System.out.println("Setting up input...");
         gameGrid.getScene().setOnKeyPressed(event -> {
-            //System.out.println("Key pressed: " + event.getCode());
             switch (event.getCode()) {
                 case W: model.setDirection(SnakeModel.Direction.UP); break;
                 case S: model.setDirection(SnakeModel.Direction.DOWN); break;
@@ -61,11 +60,12 @@ public class SnakeController {
     private void updateGame() {
         boolean won = model.update();
         view.render(model);
-        scoreLabel.setText("Score: " + model.getScore());
+        scoreLabel.setText("Player Score: " + model.getScore());
+        botScoreLabel.setText("Bot Score: " + model.getBotScore());
         if (model.isGameOver()) {
             timer.stop();
             scoreLabel.setText(won ? "You Won! Score: " + model.getScore() :
-                    "Game Over! Score: " + model.getScore());
+                    "Game Over! Score: " + model.getScore() + " Bot Score: " + model.getBotScore());
         }
     }
 }
