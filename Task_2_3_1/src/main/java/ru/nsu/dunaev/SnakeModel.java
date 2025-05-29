@@ -5,13 +5,10 @@ import java.util.Random;
 
 public class SnakeModel {
     private ArrayList<Point> snake;
-    private ArrayList<Point> botSnake;
     private Point food;
     private Point poop;
     private Direction direction;
-    private Direction botDirection;
     private int score;
-    private int botScore;
     private final int width;
     private final int height;
     private final int targetLength;
@@ -48,13 +45,9 @@ public class SnakeModel {
 
     public void reset() {
         snake = new ArrayList<>();
-        botSnake = new ArrayList<>();
         snake.add(new Point(width / 2, height / 2));
-        botSnake.add(new Point(width / 4, height / 4));
         direction = Direction.RIGHT;
-        botDirection = Direction.LEFT;
         score = 0;
-        botScore = 0;
         gameOver = false;
         spawnFood();
         spawnPoop();
@@ -63,16 +56,16 @@ public class SnakeModel {
     private void spawnFood() {
         do {
             food = new Point(random.nextInt(width), random.nextInt(height));
-        } while (snake.contains(food) || botSnake.contains(food));
+        } while (snake.contains(food));
     }
 
     private void spawnPoop() {
         do {
             poop = new Point(random.nextInt(width), random.nextInt(height));
-        } while (snake.contains(poop) || botSnake.contains(poop));
+        } while (snake.contains(poop));
     }
 
-    public boolean update() {
+    public boolean update(ArrayList<Point> botSnake) {
         if (gameOver) return false;
 
         Point head = new Point(snake.get(0).x, snake.get(0).y);
@@ -83,30 +76,12 @@ public class SnakeModel {
             case RIGHT: head.x++; break;
         }
 
-        Point botHead = new Point(botSnake.get(0).x, botSnake.get(0).y);
-        botDirection = calculateBotDirection(botHead);
-        switch (botDirection) {
-            case UP: botHead.y--; break;
-            case DOWN: botHead.y++; break;
-            case LEFT: botHead.x--; break;
-            case RIGHT: botHead.x++; break;
-        }
-
         if (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height || snake.contains(head) || botSnake.contains(head)) {
             gameOver = true;
             return false;
         }
 
-        if (botHead.x < 0 || botHead.x >= width || botHead.y < 0 || botHead.y >= height || botSnake.contains(botHead) || snake.contains(botHead)) {
-            botScore -= 5;
-            botSnake.clear();
-            botSnake.add(new Point(width / 4, height / 4));
-            botDirection = Direction.LEFT;
-            return false;
-        }
-
         snake.add(0, head);
-        botSnake.add(0, botHead);
 
         if (head.x == food.x && head.y == food.y) {
             score++;
@@ -120,18 +95,6 @@ public class SnakeModel {
             snake.removeLast();
         }
 
-        if (botHead.x == food.x && botHead.y == food.y) {
-            botScore++;
-            spawnFood();
-        } else if (botHead.x == poop.x && botHead.y == poop.y) {
-            botScore--;
-            spawnPoop();
-            botSnake.removeLast();
-            botSnake.removeLast();
-        } else {
-            botSnake.removeLast();
-        }
-
         if (snake.size() >= targetLength) {
             gameOver = true;
             return true;
@@ -142,63 +105,10 @@ public class SnakeModel {
         return false;
     }
 
-    private Direction calculateBotDirection(Point botHead) {
-        int dx = food.x - botHead.x;
-        int dy = food.y - botHead.y;
-
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0 && botDirection != Direction.LEFT && !willCollide(botHead, Direction.RIGHT)) {
-                return Direction.RIGHT;
-            } else if (dx < 0 && botDirection != Direction.RIGHT && !willCollide(botHead, Direction.LEFT)) {
-                return Direction.LEFT;
-            }
-        } else {
-            if (dy > 0 && botDirection != Direction.UP && !willCollide(botHead, Direction.DOWN)) {
-                return Direction.DOWN;
-            } else if (dy < 0 && botDirection != Direction.DOWN && !willCollide(botHead, Direction.UP)) {
-                return Direction.UP;
-            }
-        }
-        if (!willCollide(botHead, botDirection)) {
-            return botDirection;
-        }
-        for (Direction dir : Direction.values()) {
-            if (dir != oppositeDirection(botDirection) && !willCollide(botHead, dir)) {
-                return dir;
-            }
-        }
-        return botDirection;
-    }
-
-    private boolean willCollide(Point head, Direction dir) {
-        int newX = head.x;
-        int newY = head.y;
-        switch (dir) {
-            case UP: newY--; break;
-            case DOWN: newY++; break;
-            case LEFT: newX--; break;
-            case RIGHT: newX++; break;
-        }
-        Point newHead = new Point(newX, newY);
-        return newX < 0 || newX >= width || newY < 0 || newY >= height || snake.contains(newHead) || botSnake.contains(newHead);
-    }
-
-    private Direction oppositeDirection(Direction dir) {
-        switch (dir) {
-            case UP: return Direction.DOWN;
-            case DOWN: return Direction.UP;
-            case LEFT: return Direction.RIGHT;
-            case RIGHT: return Direction.LEFT;
-            default: return dir;
-        }
-    }
-
     public ArrayList<Point> getSnake() { return snake; }
-    public ArrayList<Point> getBotSnake() { return botSnake; }
     public Point getFood() { return food; }
     public Point getPoop() { return poop; }
     public int getScore() { return score; }
-    public int getBotScore() { return botScore; }
     public boolean isGameOver() { return gameOver; }
 
     public void setDirection(Direction direction) {
@@ -215,5 +125,18 @@ public class SnakeModel {
             this.direction = direction;
         }
         this.isDirectionChanging = false;
+    }
+
+    // Expose spawn methods for SnakeBotModel
+    public void spawnFood(ArrayList<Point> botSnake) {
+        do {
+            food = new Point(random.nextInt(width), random.nextInt(height));
+        } while (snake.contains(food) || botSnake.contains(food));
+    }
+
+    public void spawnPoop(ArrayList<Point> botSnake) {
+        do {
+            poop = new Point(random.nextInt(width), random.nextInt(height));
+        } while (snake.contains(poop) || botSnake.contains(poop));
     }
 }

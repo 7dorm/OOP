@@ -32,7 +32,7 @@ public class SnakeView {
         }
     }
 
-    public void render(SnakeModel model) {
+    public void render(SnakeModel model, SnakeBotModel botModel) {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 cells[i][j].setFill(Color.WHITE);
@@ -43,7 +43,7 @@ public class SnakeView {
             cells[p.x][p.y].setFill(Color.GREEN);
         }
 
-        for (SnakeModel.Point p : model.getBotSnake()) {
+        for (SnakeModel.Point p : botModel.getBotSnake()) {
             cells[p.x][p.y].setFill(Color.BLUE);
         }
 

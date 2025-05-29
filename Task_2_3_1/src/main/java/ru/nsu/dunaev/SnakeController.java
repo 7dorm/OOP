@@ -9,10 +9,11 @@ import javafx.scene.layout.GridPane;
 public class SnakeController {
     @FXML private GridPane gameGrid;
     @FXML private Label scoreLabel;
-    @FXML private Button startButton;
     @FXML private Label botScoreLabel;
+    @FXML private Button startButton;
 
     private SnakeModel model;
+    private SnakeBotModel botModel;
     private SnakeView view;
     private AnimationTimer timer;
     private static final int WIDTH = 20;
@@ -23,8 +24,9 @@ public class SnakeController {
     @FXML
     public void initialize() {
         model = new SnakeModel(WIDTH, HEIGHT, TARGET_LENGTH);
+        botModel = new SnakeBotModel(WIDTH, HEIGHT);
         view = new SnakeView(gameGrid, WIDTH, HEIGHT, CELL_SIZE);
-        view.render(model);
+        view.render(model, botModel);
     }
 
     public void setupInput() {
@@ -41,7 +43,8 @@ public class SnakeController {
     @FXML
     private void startGame() {
         model.reset();
-        view.render(model);
+        botModel.reset();
+        view.render(model, botModel);
         if (timer != null) timer.stop();
 
         timer = new AnimationTimer() {
@@ -58,14 +61,22 @@ public class SnakeController {
     }
 
     private void updateGame() {
-        boolean won = model.update();
-        view.render(model);
+        boolean won = model.update(botModel.getBotSnake());
+        boolean botNeedsUpdate = botModel.update(model.getFood(), model.getPoop(), model.getSnake());
+        if (botNeedsUpdate) {
+            if (botModel.getBotSnake().get(0).x == model.getFood().x && botModel.getBotSnake().get(0).y == model.getFood().y) {
+                model.spawnFood(botModel.getBotSnake());
+            } else if (botModel.getBotSnake().get(0).x == model.getPoop().x && botModel.getBotSnake().get(0).y == model.getPoop().y) {
+                model.spawnPoop(botModel.getBotSnake());
+            }
+        }
+        view.render(model, botModel);
         scoreLabel.setText("Player Score: " + model.getScore());
-        botScoreLabel.setText("Bot Score: " + model.getBotScore());
+        botScoreLabel.setText("Bot Score: " + botModel.getBotScore());
         if (model.isGameOver()) {
             timer.stop();
             scoreLabel.setText(won ? "You Won! Score: " + model.getScore() :
-                    "Game Over! Score: " + model.getScore() + " Bot Score: " + model.getBotScore());
+                    "Game Over! Score: " + model.getScore() + " Bot Score: " + botModel.getBotScore());
         }
     }
 }
