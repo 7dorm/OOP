@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.nsu.dunaev.MainTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-11-01T08:53:46" hostname="deudeuka-MacBook-Air.local" time="0.024">
+  <properties/>
+  <testcase name="testFindSubstringAtBoundaries()" classname="ru.nsu.dunaev.MainTest" time="0.011"/>
+  <testcase name="testFindSubstringSingleOccurrence()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testMain()" classname="ru.nsu.dunaev.MainTest" time="0.003"/>
+  <testcase name="testFindSubstringNotPresent()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testFindInLargeFile()" classname="ru.nsu.dunaev.MainTest" time="0.005"/>
+  <testcase name="testFindSubstringMultipleOccurrences()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <testcase name="testFindEmptySubstring()" classname="ru.nsu.dunaev.MainTest" time="0.001"/>
+  <system-out><![CDATA[[2, 8, 11, 29, 43, 53, 64, 68]
+[14, 27, 32, 36, 51]
+[17, 55]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
