@@ -1,6 +1,5 @@
 package ru.nsu.dunaev;
 
-
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -33,20 +32,21 @@ public class SnakeView {
         }
     }
 
-    public void render(SnakeModel model) {
-        // Очищаем поле
+    public void render(SnakeModel model, SnakeBotModel botModel) {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 cells[i][j].setFill(Color.WHITE);
             }
         }
 
-        // Рисуем змейку
         for (SnakeModel.Point p : model.getSnake()) {
             cells[p.x][p.y].setFill(Color.GREEN);
         }
 
-        // Рисуем еду
+        for (SnakeModel.Point p : botModel.getBotSnake()) {
+            cells[p.x][p.y].setFill(Color.BLUE);
+        }
+
         SnakeModel.Point food = model.getFood();
         cells[food.x][food.y].setFill(Color.RED);
 
