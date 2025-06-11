@@ -1,0 +1,11 @@
+{
+  "bakers": [
+    {"speed": 2}
+  ],
+  "couriers": [
+    {"capacity": 1}
+  ],
+  "warehouse_capacity": 2,
+  "simulation_time": 10,
+  "order_interval": 3
+}
